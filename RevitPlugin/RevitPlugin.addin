@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>RevitPluginPlugin</Name>
+    <Assembly>RevitPlugin.dll</Assembly>
+    <AddInId>FD8A9380-9412-493D-8AEF-192B5BD2197A</AddInId>
+    <FullClassName>RevitPlugin.MaterialCalculator</FullClassName>
+    <VendorId>Mehran Amini</VendorId>
+    <VendorDescription>Test</VendorDescription>
+  </AddIn>
+</RevitAddIns>

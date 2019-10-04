@@ -1,0 +1,112 @@
+﻿<Window x:Class="RevitPlugin.Commands.ElementCalculator"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RevitPlugin.Model"
+             mc:Ignorable="d" 
+             Title="My Test Panel "
+             Height="450" Width="800">
+    <Window.Resources>
+        <LinearGradientBrush x:Key="ButtonGradiantStyle" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFB8B8B8" Offset="0"/>
+            <GradientStop Color="#FFF9F9F9" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonGradiantStyle}"/>
+        </Style>
+        
+        <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True" />
+            <Setter Property="IsSelected" Value="{Binding IsInitiallySelected, Mode=OneTime}" />
+            <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+        </Style>
+
+        <HierarchicalDataTemplate x:Key="CheckBoxItemTemplate" ItemsSource="{Binding Children, Mode=OneTime}">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Focusable="False" IsChecked="{Binding IsChecked}" Tag="{Binding DataSource}" 
+                          VerticalAlignment="Center" Checked="ElementDisplayChange_CheckChange" Unchecked="ElementDisplayChange_CheckChange" />
+                <ContentPresenter Content="{Binding Name, Mode=OneTime}" Margin="2,0" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+        
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+        <StatusBar DockPanel.Dock="Bottom">
+            <Label x:Name="lblNotification">Ready</Label>
+            <Button Name="btnSelectItem" Click="BtnSelectItem_Click" Margin="1" Width="250">Get Selected Element Information</Button>
+            <Button Name="btnAddItem" Click="BtnAddItem_Click" Margin="1" Width="250" >Add New Symbol On Selected Point</Button>
+        </StatusBar>
+        <DockPanel>
+            <WrapPanel DockPanel.Dock="Top" x:Name="pnlViewOptions" Orientation="Horizontal" >
+
+            </WrapPanel>
+            <Grid DockPanel.Dock="Bottom" Height="223">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <Label Margin="1">List of elements by category(click to show details)</Label>
+                    <TreeView x:Name="trvItems" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="170"
+                              ItemContainerStyle="{StaticResource TreeViewItemStyle}"
+                              ItemTemplate="{StaticResource CheckBoxItemTemplate}"
+                              SelectedItemChanged="TrvItems_SelectedItemChanged"></TreeView>
+                    <StackPanel Orientation="Horizontal" >
+                        
+                        <Button Name="btnPrevious" Click="BtnPrevious_Click" Margin="1">Previous</Button>
+                        <Button Name="btnNext" Click="BtnNext_Click" Margin="1">Next</Button>
+                        <Label Name="lblPageInfo" Margin="1"></Label>
+                    </StackPanel>
+                    
+                </StackPanel>
+                <windows:PropertyGrid x:Name="propertyGrid" Grid.Column="1" xmlns:windows="clr-namespace:SoftFluent.Windows;assembly=SoftFluent.Windows" />
+            </Grid>
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.7*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.3*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+  
+                <Border x:Name="pnlContainer" Grid.RowSpan="2">
+
+                </Border>
+                <DataGrid Name="grdRoomInfo" Grid.Column="2" ItemsSource="{Binding RoomInfoList}" AutoGenerateColumns="false">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="Name"/>
+                        <DataGridTextColumn Binding="{Binding DepartmentName}" Header="Department Name"/>
+                        <DataGridTextColumn Binding="{Binding Number}" Header="Number"/>
+                        <DataGridTextColumn Binding="{Binding Level}" Header="Level"/>
+                        <DataGridTextColumn Binding="{Binding Area}" Header="Area"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Grid.Column="1" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="2">
+                        <Button x:Name="btnSetPattern" Click="BtnSetPattern_Click">Change Wall Patern</Button>
+                        <Button x:Name="btnHideWalls" Margin="2 0" Click="BtnHideWalls_Click">Hide Walls</Button>
+                    </StackPanel>
+                    
+                    <ListView x:Name="lstPatern">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="auto" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </Grid>
+        </DockPanel>
+
+    </DockPanel>
+</Window>
